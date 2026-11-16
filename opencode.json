@@ -4,7 +4,8 @@
     "edit": {
       "*": "allow",
       "tests/*": "deny",
-      "e2e/*": "deny"
+      "e2e/*": "deny",
+      "backlog/*": "deny"
     },
     "bash": {
       "*": "ask",
@@ -16,6 +17,7 @@
       "git status*": "allow",
       "git diff*": "allow",
       "git log*": "allow",
+      "node scripts/task.mjs *": "allow",
       "git push*": "deny",
       "rm *": "deny"
     }
