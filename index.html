@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Participants à l'atelier</title>
+    <link rel="stylesheet" href="/src/style.css" />
+  </head>
+  <body>
+    <header class="app-header">
+      <h1>Participants à l'atelier</h1>
+      <div class="header-actions" data-testid="header-actions"></div>
+    </header>
+
+    <main class="app-main">
+      <section class="card" aria-labelledby="add-title">
+        <h2 id="add-title">Ajouter un participant</h2>
+        <form class="add-form" data-testid="add-form" novalidate>
+          <label>
+            Nom
+            <input name="name" type="text" autocomplete="off" data-testid="name-input" />
+          </label>
+          <label>
+            Rôle
+            <select name="role" data-testid="role-select"></select>
+          </label>
+          <button type="submit">Ajouter</button>
+          <p class="form-error" role="alert" data-testid="form-error" hidden></p>
+        </form>
+      </section>
+
+      <section class="card" aria-labelledby="list-title">
+        <h2 id="list-title">Liste</h2>
+        <div class="list-tools" data-testid="list-tools"></div>
+        <ul class="participant-list" data-testid="participant-list"></ul>
+      </section>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

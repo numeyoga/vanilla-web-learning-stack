@@ -1,0 +1,28 @@
+{
+  "name": "factory-kit",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Kit d'atelier « Structurer son workflow humain-IA avec l'IA » : mini software factory avec Opencode",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc -p jsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "check": "npm run typecheck && npm test && npm run test:e2e",
+    "task": "node scripts/task.mjs"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.65.1",
+    "@types/node": "^22.20.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8",
+    "vitest": "^5.1.0"
+  }
+}
