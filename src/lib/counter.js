@@ -9,5 +9,6 @@
  * @returns {string}
  */
 export function formatCount(count) {
-  throw new Error(`TASK-001 : formatCount(${count}) n'est pas encore implémenté.`);
+  if (count === 0) return 'Aucun participant';
+  return `${count} participant${count > 1 ? 's' : ''}`;
 }

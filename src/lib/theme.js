@@ -14,7 +14,7 @@ export const THEME_STORAGE_KEY = 'factory-kit:theme';
  * @returns {Theme}
  */
 export function nextTheme(theme) {
-  throw new Error(`TASK-002 : nextTheme(${theme}) n'est pas encore implémenté.`);
+  return theme === 'dark' ? 'light' : 'dark';
 }
 
 /**
@@ -24,7 +24,7 @@ export function nextTheme(theme) {
  * @returns {Theme}
  */
 export function loadTheme(storage) {
-  throw new Error(`TASK-002 : loadTheme(${typeof storage}) n'est pas encore implémenté.`);
+  return storage.getItem(THEME_STORAGE_KEY) === 'dark' ? 'dark' : 'light';
 }
 
 /**
@@ -35,5 +35,5 @@ export function loadTheme(storage) {
  * @returns {void}
  */
 export function saveTheme(storage, theme) {
-  throw new Error(`TASK-002 : saveTheme(${typeof storage}, ${theme}) n'est pas encore implémenté.`);
+  storage.setItem(THEME_STORAGE_KEY, theme);
 }
