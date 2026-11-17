@@ -60,9 +60,12 @@ node scripts/task.mjs move TASK-002 done      # lance la quality gate : types + 
 Il refuse les transitions invalides (`todo → done`), horodate le journal, et refuse « done » si la vérification de
 types ou les tests de la tâche échouent. Ses messages de refus disent à l'agent quoi faire.
 
-1. **Fermer les autres accès** dans `opencode.json` :
-   - `edit` : ajouter `"backlog/*": "deny"` ;
-   - `bash` : ajouter `"node scripts/task.mjs *": "allow"`.
+1. **Fermer les autres accès** : ajouter à la fin du tableau `permissions` de `opencode.json` :
+
+   ```json
+   { "action": "edit",  "resource": "backlog/*",               "effect": "deny" },
+   { "action": "shell", "resource": "node scripts/task.mjs *", "effect": "allow" }
+   ```
 2. **Compléter le hook** de la station 2 : bloquer aussi les écritures shell vers `backlog/`.
 3. **Remplacer la consigne** du niveau A dans `AGENTS.md` : l'état se change *uniquement* via `scripts/task.mjs`.
 4. **Créer `/livrer`** : passage en `review`, relecture par le sous-agent `relecteur`, puis `done` si la relecture
