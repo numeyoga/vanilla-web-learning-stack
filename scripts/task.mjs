@@ -43,7 +43,8 @@ const STATUSES = /** @type {Status[]} */ (Object.keys(TRANSITIONS));
  * @property {string} title
  * @property {Status} status
  * @property {string} path
- * @property {string} content
+ * @property {string} content  Contenu normalisé avec des fins de ligne « \n ».
+ * @property {'\n' | '\r\n'} eol  Fins de ligne d'origine du fichier (CRLF possible sous Windows).
  */
 
 /** Erreur « métier » : message destiné à l'agent, sortie en code 1. */
@@ -72,7 +73,10 @@ function loadTask(id) {
   if (!existsSync(path)) {
     throw new Refusal(`La tâche ${id} n'existe pas.\nQue faire : node scripts/task.mjs list`);
   }
-  const content = readFileSync(path, 'utf8');
+  // Sous Windows, git peut extraire les fichiers en CRLF : on travaille en « \n » et on restaure à l'écriture.
+  const raw = readFileSync(path, 'utf8');
+  const eol = raw.includes('\r\n') ? '\r\n' : '\n';
+  const content = raw.replace(/^﻿/, '').replaceAll('\r\n', '\n');
   const frontmatter = /^---\n([\s\S]*?)\n---/.exec(content);
   if (!frontmatter) {
     throw new Refusal(`L'en-tête (frontmatter) de ${id} est absent ou cassé. Restaurer le fichier avec git.`);
@@ -90,7 +94,17 @@ function loadTask(id) {
         'Que faire : restaurer le fichier avec git ; ne jamais modifier le statut à la main.',
     );
   }
-  return { id, title: fields.title ?? '', status, path, content };
+  return { id, title: fields.title ?? '', status, path, content, eol };
+}
+
+/**
+ * Enregistre la tâche en conservant ses fins de ligne d'origine.
+ *
+ * @param {Task} task
+ * @param {string} content  Nouveau contenu, avec des fins de ligne « \n ».
+ */
+function saveTask(task, content) {
+  writeFileSync(task.path, task.eol === '\r\n' ? content.replaceAll('\n', '\r\n') : content);
 }
 
 /**
@@ -204,7 +218,7 @@ function main(argv) {
         task.content.replace(/^status:.*$/m, `status: ${target}`),
         `statut : ${task.status} → ${target}`,
       );
-      writeFileSync(task.path, updated);
+      saveTask(task, updated);
       console.log(`${task.id} : ${task.status} → ${target}`);
       return;
     }
@@ -213,7 +227,7 @@ function main(argv) {
       const task = loadTask(requireId(rawId));
       const message = rest.join(' ').trim();
       if (!message) throw new Refusal('Message de journal vide. Usage : node scripts/task.mjs log TASK-XXX "message"');
-      writeFileSync(task.path, appendJournal(task.content, message));
+      saveTask(task, appendJournal(task.content, message));
       console.log(`${task.id} : journal mis à jour`);
       return;
     }
