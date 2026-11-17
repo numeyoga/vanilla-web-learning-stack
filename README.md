@@ -8,7 +8,7 @@ chaque participant construit ces briques dans Opencode, sur une petite applicati
 
 ## Démarrage
 
-Prérequis : Node.js 22+, Google Chrome installé, Opencode.
+Prérequis : Node.js 22+, Google Chrome installé, **Opencode v2** (pour la v1, voir [atelier/compat-v1/](atelier/compat-v1/README.md)).
 
 ```bash
 npm install

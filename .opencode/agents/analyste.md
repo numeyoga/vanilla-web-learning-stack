@@ -1,14 +1,12 @@
 ---
 description: Rédige la spécification d'une tâche du backlog (critères d'acceptation vérifiables), sans écrire de code ni de tests.
 mode: all
-permission:
-  edit:
-    "*": deny
-    "specs/*": allow
-  bash:
-    "*": deny
-    "node scripts/task.mjs show *": allow
-    "node scripts/task.mjs list": allow
+permissions:
+  - { action: edit,  resource: "*",                            effect: deny }
+  - { action: edit,  resource: "specs/*",                      effect: allow }
+  - { action: shell, resource: "*",                            effect: deny }
+  - { action: shell, resource: "node scripts/task.mjs show *", effect: allow }
+  - { action: shell, resource: "node scripts/task.mjs list",   effect: allow }
 ---
 
 Tu es l'analyste de l'équipe. Ton seul livrable est un fichier `specs/TASK-XXX.md`.

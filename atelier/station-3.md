@@ -31,19 +31,20 @@ Exemple pour l'analyste :
 ---
 description: Rédige la spécification d'une tâche (critères d'acceptation vérifiables), sans écrire de code.
 mode: all
-permission:
-  edit:
-    "*": deny
-    "specs/*": allow
-  bash:
-    "*": deny
-    "node scripts/task.mjs show *": allow
+permissions:
+  - { action: edit,  resource: "*",                            effect: deny }
+  - { action: edit,  resource: "specs/*",                      effect: allow }
+  - { action: shell, resource: "*",                            effect: deny }
+  - { action: shell, resource: "node scripts/task.mjs show *", effect: allow }
 ---
 
 Tu es analyste. Tu rédiges des spécifications courtes et vérifiables dans specs/TASK-XXX.md.
 Chaque critère d'acceptation est observable (un comportement, un data-testid, un texte affiché).
 Tu ne modifies jamais le code ni les tests.
 ```
+
+Les règles d'un agent s'**ajoutent après** celles de `opencode.json` : comme la dernière règle qui correspond
+l'emporte, l'agent peut réautoriser ce que la configuration globale interdit (ici, écrire dans `specs/`).
 
 Créer sur le même modèle `testeur.md` (écrit dans `tests/` et `e2e/`, peut lancer vitest/playwright/tsc)
 et `relecteur.md` (`mode: subagent`, aucune écriture, peut lire le diff git).
@@ -81,5 +82,6 @@ Après `/tests`, vérifier que les nouveaux tests sont **rouges pour la bonne ra
 - La séparation des rôles empêche l'auto-validation : celui qui implémente n'écrit ni la spec ni les tests.
 - Le point de contrôle humain est placé là où il a le plus de valeur : la validation du contrat.
 
-> Limite à vérifier selon votre version : certains rapports indiquent que les hooks de plugin ne s'appliquent pas
-> aux outils appelés par des **sous-agents**. Les permissions de chaque agent restent alors la protection principale.
+> En v2, le hook de la station 2 reçoit l'agent qui appelle l'outil (`event.agent`) : on peut le vérifier dans
+> `factory.log` en lançant `/review`, qui s'exécute dans un sous-agent.
+> Syntaxe v1 des agents (`permission:` en objet, `bash`) : voir [compat-v1/](compat-v1/README.md).

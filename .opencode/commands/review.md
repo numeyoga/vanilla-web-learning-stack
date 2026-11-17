@@ -1,7 +1,7 @@
 ---
 description: Étape 4 — Relecture des modifications en cours (sous-agent relecteur)
 agent: relecteur
-subtask: true
+subagent: true
 ---
 
 Relis les modifications en cours. Tâche concernée (si précisée) : $ARGUMENTS

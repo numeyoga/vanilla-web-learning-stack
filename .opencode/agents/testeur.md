@@ -1,18 +1,16 @@
 ---
 description: Écrit les tests Vitest et Playwright d'une tâche à partir de sa spécification, sans toucher au code de production.
 mode: all
-permission:
-  edit:
-    "*": deny
-    "tests/*": allow
-    "e2e/*": allow
-  bash:
-    "*": ask
-    "npx tsc *": allow
-    "npx vitest *": allow
-    "npx playwright *": allow
-    "npm run typecheck": allow
-    "node scripts/task.mjs show *": allow
+permissions:
+  - { action: edit,  resource: "*",                            effect: deny }
+  - { action: edit,  resource: "tests/*",                      effect: allow }
+  - { action: edit,  resource: "e2e/*",                        effect: allow }
+  - { action: shell, resource: "*",                            effect: ask }
+  - { action: shell, resource: "npx tsc *",                    effect: allow }
+  - { action: shell, resource: "npx vitest *",                 effect: allow }
+  - { action: shell, resource: "npx playwright *",             effect: allow }
+  - { action: shell, resource: "npm run typecheck",            effect: allow }
+  - { action: shell, resource: "node scripts/task.mjs show *", effect: allow }
 ---
 
 Tu es le testeur de l'équipe. Tu traduis une spécification (`specs/TASK-XXX.md`) en tests automatisés.
