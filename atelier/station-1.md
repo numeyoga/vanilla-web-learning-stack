@@ -18,26 +18,23 @@ corriger le code… ou modifier les tests. La seconde est rapide, et c'est exact
    ```json
    {
      "$schema": "https://opencode.ai/config.json",
-     "permission": {
-       "edit": {
-         "*": "allow",
-         "tests/*": "deny",
-         "e2e/*": "deny"
-       },
-       "bash": {
-         "*": "ask",
-         "npm run *": "allow",
-         "npm test": "allow",
-         "npx tsc *": "allow",
-         "npx vitest *": "allow",
-         "npx playwright *": "allow",
-         "git status*": "allow",
-         "git diff*": "allow",
-         "git log*": "allow",
-         "git push*": "deny",
-         "rm *": "deny"
-       }
-     }
+     "permissions": [
+       { "action": "edit",  "resource": "*",                "effect": "allow" },
+       { "action": "edit",  "resource": "tests/*",          "effect": "deny" },
+       { "action": "edit",  "resource": "e2e/*",            "effect": "deny" },
+
+       { "action": "shell", "resource": "*",                "effect": "ask" },
+       { "action": "shell", "resource": "npm run *",        "effect": "allow" },
+       { "action": "shell", "resource": "npm test *",       "effect": "allow" },
+       { "action": "shell", "resource": "npx tsc *",        "effect": "allow" },
+       { "action": "shell", "resource": "npx vitest *",     "effect": "allow" },
+       { "action": "shell", "resource": "npx playwright *", "effect": "allow" },
+       { "action": "shell", "resource": "git status *",     "effect": "allow" },
+       { "action": "shell", "resource": "git diff *",       "effect": "allow" },
+       { "action": "shell", "resource": "git log *",        "effect": "allow" },
+       { "action": "shell", "resource": "git push *",       "effect": "deny" },
+       { "action": "shell", "resource": "rm *",             "effect": "deny" }
+     ]
    }
    ```
 
@@ -62,10 +59,12 @@ corriger le code… ou modifier les tests. La seconde est rapide, et c'est exact
 
 ## Points à retenir
 
-- Trois effets : `allow` (autorisé), `ask` (validation humaine), `deny` (interdit).
-- Pour les commandes, **la dernière règle qui correspond l'emporte** : on met le `"*"` général en premier, puis les exceptions.
+- Une règle = une **action** (`edit`, `shell`, `read`, `webfetch`…), une **ressource** (chemin, commande, URL) et un **effet**.
+- Trois effets : `allow` (autorisé), `ask` (validation humaine), `deny` (interdit). Sans règle correspondante : `ask`.
+- **La dernière règle qui correspond l'emporte** : on met la règle générale (`"*"`) en premier, puis les exceptions.
+- Un motif de commande qui finit par `*` accepte aussi la commande seule : `git status *` couvre `git status`.
 - C'est simple et lisible… mais limité à des motifs de chemins et de commandes. Que se passe-t-il si l'agent écrit
   dans un test via le shell (`sed -i`, `echo >`) ? → station 2.
 
-> Format de configuration : cet énoncé utilise la syntaxe « V1 » (`permission`), lue par Opencode 1.x **et** 2.x.
-> L'équivalent en syntaxe native V2 (`permissions`, tableau de règles) est donné dans [ANIMATEUR.md](ANIMATEUR.md).
+> Cet énoncé utilise la syntaxe d'**Opencode v2** (`permissions`, tableau de règles, action `shell`).
+> Vous êtes encore en v1 (`opencode --version`) ? Utilisez les fichiers de [compat-v1/](compat-v1/README.md).
